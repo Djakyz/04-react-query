@@ -18,6 +18,14 @@ interface MovieApiResponse {
   total_pages: number;
 }
 
+export interface MovieVideo {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+}
+
 export async function fetchMovies(
   query: string,
   page: number = 1
@@ -31,4 +39,15 @@ export async function fetchMovies(
     },
   });
   return response.data;
+}
+
+// additional - watch trailer
+export async function fetchMovieVideos(movieId: number): Promise<MovieVideo[]> {
+  const response = await tmdbAxios.get<{ results: MovieVideo[] }>(
+    `/movie/${movieId}/videos`,
+    {
+      params: { language: "en-US" },
+    }
+  );
+  return response.data.results;
 }
